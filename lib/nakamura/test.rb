@@ -1,8 +1,8 @@
 require 'test/unit.rb'
-require 'sling/sling'
-require 'sling/users'
-require 'sling/file'
-require 'sling/search'
+require 'nakamura'
+require 'nakamura/users'
+require 'nakamura/file'
+require 'nakamura/search'
 require 'tempfile'
 require 'logger'
 

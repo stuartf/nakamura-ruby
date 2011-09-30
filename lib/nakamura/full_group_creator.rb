@@ -3,10 +3,9 @@
 # work on KERN-1881 to duplicate all 11 to 13 POSTs that go into creating a group
 
 require 'json'
-require '../kerns/ruby-lib-dir.rb'
-require 'sling/sling'
-require 'sling/users'
-require 'sling/file'
+require 'nakamura'
+require 'nakamura/users'
+require 'nakamura/file'
 include SlingInterface
 include SlingUsers
 include SlingFile

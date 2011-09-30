@@ -5,7 +5,7 @@ require 'cgi'
 require 'rubygems'
 require 'json'
 require 'yaml'
-require 'sling/users'
+require 'nakamura/users'
 require 'logger'
 
 class String
