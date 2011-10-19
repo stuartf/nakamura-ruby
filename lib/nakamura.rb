@@ -8,6 +8,13 @@ require 'yaml'
 require 'nakamura/users'
 require 'logger'
 
+# Convert time to nanoseconds
+class Time
+  def to_nsec
+    self.to_f.to_s.gsub(".", "").to_i
+  end
+end
+
 class String
   def base64_decode
     unpack('m').first
@@ -256,8 +263,8 @@ module SlingInterface
         @log.debug("Set-Cookie header #{setcookie} ")
         setcookie.each do |cookieitem|
           cookie = cookieitem.split(/;/)[0]
-          cookiename = cookie.split(/=/)[0]
-          value = cookie.split(/=/)[1]
+          cookiename = cookie.split(/\=/)[0]
+          value = cookie.split(/\=/)[1]
           cookievalue = "#{cookiename}=#{value}"
           if ( @cookies[cookiename] != cookievalue ) 
              @cookies[cookiename] = cookievalue
