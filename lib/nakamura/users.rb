@@ -154,6 +154,10 @@ module SlingUsers
 
   class User < Principal
     attr_accessor :password
+    attr_accessor :firstName
+    attr_accessor :lastName
+    attr_accessor :password
+    attr_accessor :email
 
     def initialize(username, password=$DEFAULT_PASSWORD)
       super(username)
@@ -184,6 +188,27 @@ module SlingUsers
       return sling.execute_post(sling.url_for("#{user_url}.update.html"), props)
     end
 
+    def update_user(sling)
+        data = {}
+        if (!firstName.nil? and !lastName.nil? and !email.nil?)
+            data[":sakai:profile-import"] = "{'basic': {'access': 'everybody', 'elements': {'email': {'value': '#{email}'}, 'firstName': {'value': '#{firstName}'}, 'lastName': {'value': '#{lastName}'}}}}"
+            # data[":sakai:pages-template"] = "/var/templates/site/defaultuser"
+        end
+
+        if (!firstName.nil?)
+            data["firstName"] = firstName
+        end
+
+        if (!lastName.nil?)
+            data["lastName"] = lastName
+        end
+
+        if (!email.nil?)
+            data["email"] = email
+        end
+
+        return update_properties(sling, data)
+    end
 
 	def change_password(sling, newpassword)
 	   return sling.execute_post(sling.url_for("#{user_url}.changePassword.html"), "oldPwd" => @password, "newPwd" => newpassword, "newPwdConfirm" => newpassword)
@@ -261,23 +286,48 @@ module SlingUsers
       return create_user("testuser#{@date}-#{id}")
     end
 
+    def create_user_object(user)
+        data = { ":name" => user.name,
+            "pwd" => user.password,
+            "pwdConfirm" => user.password
+        }
+
+        if (!user.firstName.nil? and !user.lastName.nil? and !user.email.nil?)
+            data[":sakai:profile-import"] = "{'basic': {'access': 'everybody', 'elements': {'email': {'value': '#{user.email}'}, 'firstName': {'value': '#{user.firstName}'}, 'lastName': {'value': '#{user.lastName}'}}}}"
+            # data[":sakai:pages-template"] = "/var/templates/site/defaultuser"
+        end
+
+        if (!user.firstName.nil?)
+            data["firstName"] = user.firstName
+        end
+
+        if (!user.lastName.nil?)
+            data["lastName"] = user.lastName
+        end
+
+        if (!user.email.nil?)
+            data["email"] = user.email
+        end
+
+        result = @sling.execute_post(@sling.url_for("#{$USER_URI}"), data)
+        if (result.code.to_i > 299)
+            @log.info "Error creating user"
+            return nil
+        end
+        return user
+    end
+
     def create_user(username, firstname = nil, lastname = nil)
       @log.info "Creating user: #{username}"
       user = User.new(username)
-      data = { ":name" => user.name,
-              "pwd" => user.password,
-              "pwdConfirm" => user.password
-      }
-      if (!firstname.nil? and !lastname.nil?)
-        data[":sakai:profile-import"] = "{'basic': {'access': 'everybody', 'elements': {'email': {'value': '#{username}@sakai.invalid'}, 'firstName': {'value': '#{firstname}'}, 'lastName': {'value': '#{lastname}'}}}}"
-        # data[":sakai:pages-template"] = "/var/templates/site/defaultuser"
+      user.firstName = firstname
+      user.lastName = lastname
+
+      if (!user.firstName.nil? and !user.lastName.nil? and user.email.nil?)
+         user.email = "#{username}@sakai.invalid"
       end
-      result = @sling.execute_post(@sling.url_for("#{$USER_URI}"), data)
-      if (result.code.to_i > 299)
-        @log.info "Error creating user"
-        return nil
-      end
-      return user
+
+      return create_user_object(user)
     end
     
     def create_group(groupname, title = nil)

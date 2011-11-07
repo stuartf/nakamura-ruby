@@ -84,7 +84,7 @@ module SlingInterface
   
   class Sling
     
-    attr_accessor :log, :trustedauth
+    attr_accessor :log, :trustedauth, :loggedin
     
     def initialize(server="http://localhost:8080/", trustedauth=false)
       @server = server
