@@ -70,8 +70,12 @@ module SlingTest
     return g
   end
 
+  def uniqueness()
+    Time.now.to_f.to_s.gsub(".", "")
+  end
+
   def wait_for_indexer()
-    magic_content = "#{Time.now().to_i}_#{rand(1000).to_s}"
+    magic_content = "#{uniqueness()}_#{rand(1000).to_s}"
     filename = "wait_for_indexer_#{magic_content}"
 
     fm = SlingFile::FileManager.new(@s)
