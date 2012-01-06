@@ -18,6 +18,8 @@ module SlingTest
     @s = SlingInterface::Sling.new()
     @um = SlingUsers::UserManager.new(@s)
     @search = SlingSearch::SearchManager.new(@s)
+    @fm = SlingFile::FileManager.new(@s)
+
     @created_nodes = []
     @created_users = []
     @created_groups = []
@@ -50,21 +52,14 @@ module SlingTest
   end
 
   def create_pooled_content(filename, content, props={})
-    properties = {}
-    properties.merge!(props)
-    properties['sakai:pooled-content-file-name'] = filename
-    properties['content'] = content
-
-    url = '/system/pool/createfile'
-    res = @s.create_node(url, properties)
-
+    res = @fm.upload_pooled_file(filename,{},'text/plain')
     assert_not_nil(res)
     assert_equal(true, res.code.to_i >= 200 && res.code.to_i < 300, "Expected to be able to create node #{res.body}")
     json = JSON.parse(res.body)
-    assert_not_nil(json['_contentItem'])
-    assert_not_nil(json['_contentItem']['poolId'])
+    assert_not_nil(json[filename])
+    assert_not_nil(json[filename]['poolId'])
 
-    path = "/p/#{json['_contentItem']['poolId']}"
+    path = "/p/#{json[filename]['poolId']}"
     @created_nodes << path unless @created_nodes.include?(path)
     return path
   end
