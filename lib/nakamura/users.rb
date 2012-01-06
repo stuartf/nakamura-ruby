@@ -4,7 +4,7 @@ require 'digest/sha1'
 require 'logger'
 
 $USERMANAGER_URI="system/userManager/"
-$GROUP_URI="#{$USERMANAGER_URI}group.create.html"
+$GROUP_URI="system/world/create"
 $USER_URI="#{$USERMANAGER_URI}user.create.html"
 $DEFAULT_PASSWORD="testuser"
 
@@ -330,20 +330,30 @@ module SlingUsers
       return create_user_object(user)
     end
     
-    def create_group(groupname, title = nil)
+    def create_group(groupname, title = '')
         @log.info "Creating group: #{groupname}"
               group = Group.new(groupname)
-      params = { ":name" => group.name }
-      if (title)
-        params['sakai:group-title'] = title
-      end
-      params['sakai:group-description'] = ''
-      params['sakai:group-id'] = groupname
-#      params[':sakai:pages-template'] = '/var/templates/site/defaultgroup'
-      params['sakai:pages-visible'] = 'public'
-      params['sakai:group-joinable'] = 'yes'
+      params = { "data" => JSON.generate({ 
+        'id' => group.name,
+        'title' => title,
+        'description' => '',
+        'visibility' => 'public',
+        'joinability' => 'yes',
+        'tags' => [],
+        'worldTemplate' => '/var/templates/worlds/group/simple-group',
+        '_charset_' => 'utf-8',
+        'usersToAdd' => [{
+          "userid" => "admin",
+          "name" => "Admin",
+          "firstname" => "Admin",
+          "role" => "manager",
+          "roleString" => "Manager",
+          "creator" => "true"
+        }]
+      })}
       result = @sling.execute_post(@sling.url_for($GROUP_URI), params)
       if (result.code.to_i > 299)
+        @log.error(result.body)
         return nil
       end
       return group
