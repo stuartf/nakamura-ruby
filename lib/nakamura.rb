@@ -287,10 +287,10 @@ module SlingInterface
       res = createHttp(uri).start{ |http| http.request(req) }
       if ( res.code == "200" ) 
         save_cookies(res)
-	@log.info("Login Ok, cookie was  {#@cookies}")
+        @log.info("Login Ok, cookie was  {#@cookies}")
         @loggedin = true
       else
-	@log.info("Failed to perform login, got "+res.code+" response code")
+        @log.info("Failed to perform login, got "+res.code+" response code")
       end
     end
     

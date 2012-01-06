@@ -28,11 +28,11 @@ module SlingTest
 
   def teardown
     if ( @delete ) then
-		@s.switch_user(SlingUsers::User.admin_user)
-		@created_nodes.reverse.each { |n| @s.delete_node(n) }
-		@created_groups.each { |g| @um.delete_group(g) }
-		@created_users.each { |u| @um.delete_user(u.name) }
-	end
+      @s.switch_user(SlingUsers::User.admin_user)
+      @created_nodes.reverse.each { |n| @s.delete_node(n) }
+      @created_groups.each { |g| @um.delete_group(g) }
+      @created_users.each { |u| @um.delete_user(u.name) }
+    end
   end
 
   def create_node(path, props={})
