@@ -11,7 +11,7 @@ module SlingSearch
     end
 
     def search_for(string)
-      return json_search("content", "q" => string)
+      return json_search("solr/content", "q" => string)
     end
 
     def create_search_template(name, language, template)
@@ -30,9 +30,14 @@ module SlingSearch
       return json_search("sites", "q" => sitepropertyvalue)
     end
     
+    def search_for_file(query)
+      return json_search('files/allfiles.json', 'q' => query)
+    end
+
     private
     def json_search(template, params)
-      return JSON.parse(@sling.execute_get(@sling.url_for($SEARCH + template) + ".json?" + params.collect{|k,v| URI.escape(k) + "=" + URI.escape(v)}.join("&")).body)
+      url = @sling.url_for($SEARCH + template) + ".json?" + params.collect{|k,v| URI.escape(k) + "=" + URI.escape(v)}.join("&")
+      return JSON.parse(@sling.execute_get(url).body)
     end
   end
 

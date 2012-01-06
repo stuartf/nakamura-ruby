@@ -88,6 +88,9 @@ module SlingInterface
     
     def initialize(server="http://localhost:8080/", trustedauth=false)
       @server = server
+      if not @server.end_with? '/'
+        @server += '/'
+      end
       @serveruri = URI.parse(server)
       @user = SlingUsers::User.admin_user()
       @trustedauth = trustedauth

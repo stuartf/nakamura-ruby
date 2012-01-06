@@ -49,6 +49,26 @@ module SlingTest
     return res
   end
 
+  def create_pooled_content(filename, content, props={})
+    properties = {}
+    properties.merge!(props)
+    properties['sakai:pooled-content-file-name'] = filename
+    properties['content'] = content
+
+    url = '/system/pool/createfile'
+    res = @s.create_node(url, properties)
+
+    assert_not_nil(res)
+    assert_equal(true, res.code.to_i >= 200 && res.code.to_i < 300, "Expected to be able to create node #{res.body}")
+    json = JSON.parse(res.body)
+    assert_not_nil(json['_contentItem'])
+    assert_not_nil(json['_contentItem']['poolId'])
+
+    path = "/p/#{json['_contentItem']['poolId']}"
+    @created_nodes << path unless @created_nodes.include?(path)
+    return path
+  end
+
   def create_user(username, firstname = nil, lastname = nil)
     u = @um.create_user(username, firstname, lastname)
     assert_not_nil(u, "Expected user to be created: #{username}")
