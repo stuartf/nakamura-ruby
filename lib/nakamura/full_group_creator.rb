@@ -55,7 +55,7 @@ module SlingUsers
         }]
       })}
 
-      result = @sling.execute_post(@sling.url_for($GROUP_URI), params)
+      result = @sling.execute_post(@sling.url_for($GROUP_WORLD_URI), params)
       if (result.code.to_i > 299)
         @log.error result.body
         return nil
