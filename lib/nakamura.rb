@@ -53,9 +53,9 @@ module Net::HTTPHeader
   
   def encode_kvpair(k, vs)
     if vs.nil? or vs == '' then
-      "#{urlencode(k)}="
+      "#{CGI::escape(k)}="
     else
-      Array(vs).map {|v| "#{urlencode(k)}=#{urlencode(v.to_s)}" }
+      Array(vs).map {|v| "#{CGI::escape(k)}=#{CGI::escape(v.to_s)}" }
     end
   end
 end
