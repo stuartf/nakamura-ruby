@@ -22,9 +22,7 @@ module SlingUsers
 
     def initialize(sling, file_log = nil)
       @sling = sling
-      @sling.log.level = Logger::INFO
       super sling
-      @log.level = Logger::INFO
       @file_log = file_log
     end
 
