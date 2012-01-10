@@ -4,7 +4,8 @@ require 'digest/sha1'
 require 'logger'
 
 $USERMANAGER_URI="system/userManager/"
-$GROUP_URI="system/world/create"
+$GROUP_URI="#{$USERMANAGER_URI}group.create.html"
+$GROUP_WORLD_URI="system/world/create"
 $USER_URI="#{$USERMANAGER_URI}user.create.html"
 $DEFAULT_PASSWORD="testuser"
 
@@ -351,7 +352,7 @@ module SlingUsers
           "creator" => "true"
         }]
       })}
-      result = @sling.execute_post(@sling.url_for($GROUP_URI), params)
+      result = @sling.execute_post(@sling.url_for($GROUP_WORLD_URI), params)
       if (result.code.to_i > 299)
         @log.error(result.body)
         return nil

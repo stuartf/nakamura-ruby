@@ -74,7 +74,7 @@ module SlingContacts
    end
 
 		def find_contacts(state)
-			result = @sling.execute_get(@sling.url_for("var/contacts/findstate?state=#{state}"))
+			result = @sling.execute_get(@sling.url_for("var/contacts/findstate.json?state=#{state}"))
     	return JSON.parse(result.body)
 		end
     

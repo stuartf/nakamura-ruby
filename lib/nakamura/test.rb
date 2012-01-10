@@ -18,6 +18,8 @@ module SlingTest
     @s = SlingInterface::Sling.new()
     @um = SlingUsers::UserManager.new(@s)
     @search = SlingSearch::SearchManager.new(@s)
+    @fm = SlingFile::FileManager.new(@s)
+
     @created_nodes = []
     @created_users = []
     @created_groups = []
@@ -28,11 +30,11 @@ module SlingTest
 
   def teardown
     if ( @delete ) then
-		@s.switch_user(SlingUsers::User.admin_user)
-		@created_nodes.reverse.each { |n| @s.delete_node(n) }
-		@created_groups.each { |g| @um.delete_group(g) }
-		@created_users.each { |u| @um.delete_user(u.name) }
-	end
+      @s.switch_user(SlingUsers::User.admin_user)
+      @created_nodes.reverse.each { |n| @s.delete_node(n) }
+      @created_groups.each { |g| @um.delete_group(g) }
+      @created_users.each { |u| @um.delete_user(u.name) }
+    end
   end
 
   def create_node(path, props={})
@@ -47,6 +49,19 @@ module SlingTest
     res = @s.create_file_node(path, fieldname, filename, data, content_type)
     @created_nodes << path unless @created_nodes.include?(path)
     return res
+  end
+
+  def create_pooled_content(filename, content, props={})
+    res = @fm.upload_pooled_file(filename,{},'text/plain')
+    assert_not_nil(res)
+    assert_equal(true, res.code.to_i >= 200 && res.code.to_i < 300, "Expected to be able to create node #{res.body}")
+    json = JSON.parse(res.body)
+    assert_not_nil(json[filename])
+    assert_not_nil(json[filename]['poolId'])
+
+    path = "/p/#{json[filename]['poolId']}"
+    @created_nodes << path unless @created_nodes.include?(path)
+    return path
   end
 
   def create_user(username, firstname = nil, lastname = nil)
