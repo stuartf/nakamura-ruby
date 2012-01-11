@@ -10,10 +10,6 @@ module SlingSearch
       @sling = sling
     end
 
-    def search_for(string)
-      return json_search("solr/content", "q" => string)
-    end
-
     def create_search_template(name, language, template)
       return @sling.create_node("#{$SEARCH}#{name}", "sakai:query-language" => language, "sakai:query-template" => template, "sling:resourceType" => "sakai/search") 
     end
