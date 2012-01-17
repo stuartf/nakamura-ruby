@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rake/clean'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 
 spec = Gem::Specification.new do |s|
   s.authors = "Sakai Project"
@@ -16,7 +16,9 @@ spec = Gem::Specification.new do |s|
   s.description = "Ruby library for interacting with Sakai Nakamura. Provides convenience methods for adding users and groups and other similar tasks."
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
+  spec.add_dependency('json', '>=1.6.3')
+
+Gem::PackageTask.new(spec) do |pkg|
   pkg.need_zip = true
   pkg.need_tar = true
 end
