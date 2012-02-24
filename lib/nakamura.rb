@@ -176,7 +176,7 @@ module SlingInterface
         end
         set_cookies(req)
       else
-        @log.warn("Path #{uri} is not a Sling URL, not sending state")
+        @log.info("#{uri.host} does not match expected #{@serverui.host}. Not sending state.")
       end
       res = createHttp(uri).start { |http| http.request(req ) }
       save_cookies(res) if (isSlingReq)
