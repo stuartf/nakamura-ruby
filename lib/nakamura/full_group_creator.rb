@@ -28,8 +28,7 @@ module SlingUsers
 
     # this method follows the series of POSTs that the UI makes to create a group with a
     # full set of features including the initial sakai docs for Library and Participants
-    def create_full_group(creator_id, groupname, title = '', description = '')
-      creator = User.new(creator_id, "testuser")
+    def create_full_group(creator, groupname, title = '', description = '')
       @sling.switch_user(creator)
 
       group = Group.new(groupname)
@@ -44,7 +43,7 @@ module SlingUsers
         "worldTemplate" => "/var/templates/worlds/group/simple-group",
         "_charset_" => "utf-8",
         "usersToAdd" => [{
-          "userid" => creator_id,
+          "userid" => creator.name,
           "name" => creator.name,
           "firstname" => creator.firstName,
           "role" => "manager",
