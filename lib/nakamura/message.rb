@@ -12,7 +12,7 @@ module SlingMessage
 
     def create(name, type, box = "drafts", props = {})
       @home = @sling.get_user().home_path_for(@sling)
-      return @sling.execute_post(@sling.url_for("#{@home}/message.create.html"), props.update("sakai:type" => type, "sakai:to" => name, "sakai:sendstate" => "pending", "sakai:messagebox" => box))
+      return @sling.execute_post(@sling.url_for("#{@home}/message.create.html"), props.update("sakai:type" => type, "sakai:to" => name, "sakai:sendstate" => "pending", "sakai:messagebox" => box, "sakai:category" => "message"))
     end
  
     def send(messageId, sender)
