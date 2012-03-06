@@ -24,8 +24,8 @@ module OSGIConf
       if ( res.code != "200" )
         @log.debug(res.body)
         @log.info(" Unable to update config for #{factoryPid}")
-        return false
       end
+      return res
     end
   end
 end

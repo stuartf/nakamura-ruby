@@ -53,6 +53,7 @@ module SlingUsers
       })}
 
       result = @sling.execute_post(@sling.url_for($GROUP_WORLD_URI), params)
+      @sling.switch_user(User.admin_user)
       if (result.code.to_i > 299)
         @log.error result.body
         return nil
