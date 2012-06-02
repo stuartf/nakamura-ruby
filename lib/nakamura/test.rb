@@ -91,7 +91,8 @@ module SlingTest
 
   def wait_for_indexer()
     magic_content = "#{uniqueness()}_#{rand(1000).to_s}"
-    path = "~admin/private/wait_for_indexer_#{magic_content}"
+    current_user = @s.get_user()
+    path = "~#{current_user.name}/private/wait_for_indexer_#{magic_content}"
     urlpath = @s.url_for(path)
     res = @s.execute_post(urlpath, {
       "sling:resourceType" => "sakai/widget-data",
