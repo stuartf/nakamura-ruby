@@ -27,7 +27,7 @@ module SlingSearch
     end
     
     def search_for_file(query)
-      return json_search('files/allfiles.json', 'q' => query)
+      return json_search('pool/all', 'q' => query)
     end
 
     private
