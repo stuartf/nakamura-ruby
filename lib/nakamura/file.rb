@@ -35,10 +35,6 @@ module SlingFile
       return @sling.execute_post(@sling.url_for(url), props)
     end
 
-    def myfiles(search)
-      return @sling.execute_get(@sling.url_for("/var/search/files/myfiles.json?q=#{search}"))
-    end
-
     def upload_pooled_file(name, data, content_type, toid=nil)
       if ( toid == nil )
          return @sling.execute_file_post(@sling.url_for("/system/pool/createfile"), name, name, data, content_type)
