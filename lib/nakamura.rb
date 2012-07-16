@@ -281,8 +281,8 @@ module SlingInterface
 
     def do_login() 
       path = url_for("/system/sling/formlogin")
-      req = Net::HTTP::Post.new(path)
       uri = URI.parse(path)
+      req = Net::HTTP::Post.new(uri.path)
       req.set_form_data({ "sakaiauth:un" => @user.name, "sakaiauth:pw" => @user.password, "sakaiauth:login" => 1 })
       res = createHttp(uri).start{ |http| http.request(req) }
       if ( res.code == "200" ) 
