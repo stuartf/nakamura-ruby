@@ -192,7 +192,7 @@ module SlingUsers
     def update_user(sling)
         data = {}
         if (!firstName.nil? and !lastName.nil? and !email.nil?)
-            data[":sakai:profile-import"] = "{'basic': {'access': 'everybody', 'elements': {'email': {'value': '#{email}'}, 'firstName': {'value': '#{firstName}'}, 'lastName': {'value': '#{lastName}'}}}}"
+            data[":sakai:profile-import"] = JSON.generate({'basic' => {'access' => 'everybody', 'elements' => {'email' => {'value' => email}, 'firstName' => {'value' => firstName}, 'lastName' => {'value' => lastName}}}})
             # data[":sakai:pages-template"] = "/var/templates/site/defaultuser"
         end
 
@@ -294,7 +294,7 @@ module SlingUsers
         }
 
         if (!user.firstName.nil? and !user.lastName.nil? and !user.email.nil?)
-            data[":sakai:profile-import"] = "{'basic': {'access': 'everybody', 'elements': {'email': {'value': '#{user.email}'}, 'firstName': {'value': '#{user.firstName}'}, 'lastName': {'value': '#{user.lastName}'}}}}"
+            data[":sakai:profile-import"] = JSON.generate({'basic' => {'access' => 'everybody', 'elements' => {'email' => {'value' => user.email}, 'firstName' => {'value' => user.firstName}, 'lastName' => {'value' => user.lastName}}}})
             # data[":sakai:pages-template"] = "/var/templates/site/defaultuser"
         end
 
