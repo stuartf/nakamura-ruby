@@ -183,9 +183,26 @@ module SlingInterface
       return res
     end
     
-    def delete_file(path) 
+    def delete_file(path, query_params=nil)
+      if (query_params != nil)
+        param_string = query_params.collect { |k,v|
+          val = case v
+                  when String then
+                    v
+                  when Numeric then
+                    v.to_s
+                  else
+                    v.to_json
+                end
+          CGI.escape(k) + "=" + CGI.escape(val)
+        }.join("&")
+        path = "#{path}?#{param_string}"
+      end
       uri = URI.parse(path)
-      req = Net::HTTP::Delete.new(uri.path)
+      path = uri.path
+      path = path + "?" + uri.query if uri.query
+      @log.debug("DELETE: #{path} (as '#{@user.name}')")
+      req = Net::HTTP::Delete.new(path)
       res = sendRequest(uri, req)
       dump_response(res)
       return res
