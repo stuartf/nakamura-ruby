@@ -308,6 +308,8 @@ module SlingUsers
 
         if (!user.email.nil?)
             data["email"] = user.email
+        else
+            data["email"] = "#{user.firstName}@sakai.invalid"
         end
 
         result = @sling.execute_post(@sling.url_for("#{$USER_URI}"), data)
@@ -318,14 +320,15 @@ module SlingUsers
         return user
     end
 
-    def create_user(username, firstname = nil, lastname = nil)
+    def create_user(username, firstname = nil, lastname = nil, email = nil)
       @log.info "Creating user: #{username}"
       user = User.new(username)
       user.firstName = firstname
       user.lastName = lastname
+      user.email = email
 
-      if (!user.firstName.nil? and !user.lastName.nil? and user.email.nil?)
-         user.email = "#{username}@sakai.invalid"
+      if user.email.nil?
+          user.email = "#{username}@sakai.invalid"
       end
 
       return create_user_object(user)

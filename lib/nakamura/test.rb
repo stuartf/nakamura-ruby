@@ -64,8 +64,18 @@ module SlingTest
     return path
   end
 
-  def create_user(username, firstname = nil, lastname = nil)
-    u = @um.create_user(username, firstname, lastname)
+  def create_user(username, firstname = nil, lastname = nil, email = nil)
+    if firstname.nil?
+      firstname = "first-#{username}"
+    end
+    if lastname.nil?
+      lastname = "last-#{username}"
+    end
+    if email.nil?
+      email = "#{username}@sakai.invalid"
+    end
+
+    u = @um.create_user(username, firstname, lastname, email)
     assert_not_nil(u, "Expected user to be created: #{username}")
     @created_users << u
     return u
