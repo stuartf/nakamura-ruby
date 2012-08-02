@@ -53,13 +53,19 @@ module SlingFile
       return @sling.execute_get(path)
     end
 
-    def manage_members(id, add_viewers, delete_viewers, add_managers, delete_managers)
+    def manage_members(id, add_viewers, delete_viewers, add_managers, delete_managers, add_editors=nil, delete_editors=nil)
       path = "#{url_for_pooled_file(id)}.members.html"
       params = {}
       params[":viewer"] ||= add_viewers
       params[":viewer@Delete"] ||= delete_viewers
       params[":manager"] ||= add_managers
       params[":manager@Delete"] ||= delete_managers
+      if add_editors != nil
+        params[":editor"] ||= add_editors
+      end
+      if delete_editors != nil
+        params[":editor@Delete"] ||= delete_editors
+      end
       return @sling.execute_post(path, params)
     end
 
