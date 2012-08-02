@@ -9,7 +9,7 @@ spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.summary = "Ruby library for interacting with Sakai Nakamura."
   s.name = 'nakamura'
-  s.version = '0.13'
+  s.version = '0.14'
   s.requirements << 'none'
   s.require_path = 'lib'
   s.files = FileList['lib/**/*.rb']
